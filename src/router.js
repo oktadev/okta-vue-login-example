@@ -5,20 +5,22 @@ import Edit from './components/Edit.vue'
 import Read from './components/Read.vue'
 import Auth from '@okta/okta-vue'
 
+Vue.use(Router)
 Vue.use(Auth, {
-  issuer: 'https://dev-322018.oktapreview.com/oauth2/default',
-  client_id: '0oaqg7wcbinbloxq50h7',
+  issuer: 'https://dev-133320.okta.com/oauth2/default',
+  client_id: '0oa3bqs41tVELHz31357',
   redirect_uri: 'http://localhost:8080/implicit/callback',
-  scopes: ['openid','profile','groups'],
+  scopes: ['openid','profile'],
+  pkce: true
 });
 
 const authGuard = (group) => async function(to, from, next) {
-  console.log('AUTH', await router.app.$auth.oktaAuth.tokenManager.get('idToken'));
+  console.log('user', await Vue.prototype.$auth.getUser());
   if (group) {
     // Check if user is member of the group.
     // This should be contained in the claims stored in the idToken.
   }
-  const authenticated = await router.app.$auth.isAuthenticated();
+  const authenticated = await Vue.prototype.$auth.isAuthenticated();
   if (authenticated) {
     next();
   } else {
@@ -26,8 +28,6 @@ const authGuard = (group) => async function(to, from, next) {
     next(false);
   }
 }
-
-Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
@@ -62,5 +62,7 @@ const router = new Router({
     }
   ]
 })
+
+router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
 
 export default router;
