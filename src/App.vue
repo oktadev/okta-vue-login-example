@@ -45,6 +45,9 @@ export default {
       // Navigate back to home
       this.$router.push({ path: '/' })
     }
+  },
+  created() {
+    this.isAuthenticated();
   }
 }
 </script>

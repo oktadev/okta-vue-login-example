@@ -4,30 +4,15 @@ import Home from './components/Home.vue'
 import Edit from './components/Edit.vue'
 import Read from './components/Read.vue'
 import Auth from '@okta/okta-vue'
+import { isInGroup } from './auth-guards'
 
 Vue.use(Router)
 Vue.use(Auth, {
-  issuer: 'https://dev-322018.okta.com/oauth2/default',
-  client_id: '0oaqg7wcbinbloxq50h7',
-  redirect_uri: 'http://localhost:8080/implicit/callback',
+  issuer: 'https://dev-322018.oktapreview.com/oauth2/default',
+  client_id: '0oak3zy3jhU7IZdW70h7',
+  redirect_uri: window.location.origin + '/implicit/callback',
   scopes: ['openid','profile'],
-  pkce: true
 });
-
-const authGuard = (group) => async function(to, from, next) {
-  console.log('user', await Vue.prototype.$auth.getUser());
-  if (group) {
-    // Check if user is member of the group.
-    // This should be contained in the claims stored in the idToken.
-  }
-  const authenticated = await Vue.prototype.$auth.isAuthenticated();
-  if (authenticated) {
-    next();
-  } else {
-    router.app.$auth.loginRedirect(to.path);
-    next(false);
-  }
-}
 
 const router = new Router({
   mode: 'history',
@@ -42,13 +27,18 @@ const router = new Router({
       path: '/read',
       name: 'read',
       component: Read,
-      beforeEnter: authGuard()
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/edit',
       name: 'edit',
       component: Edit,
-      beforeEnter: authGuard('Editors')
+      meta: {
+        requiresAuth: true,
+      },
+      beforeEnter: isInGroup('editor')
     },
     {
       path: '/implicit/callback',
