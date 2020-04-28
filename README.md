@@ -1,4 +1,4 @@
-# vue-cms-blueprint
+# vue-cms-groups
 
 ## Project setup
 ```

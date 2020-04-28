@@ -3,15 +3,17 @@ import Router from 'vue-router'
 import Home from './components/Home.vue'
 import Edit from './components/Edit.vue'
 import Read from './components/Read.vue'
-import Auth from '@okta/okta-vue'
-import { isInGroup } from './auth-guards'
 
-Vue.use(Router)
+import Auth from '@okta/okta-vue'
+import { isInGroup } from './user'
+
+Vue.use(Router);
 Vue.use(Auth, {
-  issuer: 'https://dev-322018.oktapreview.com/oauth2/default',
-  client_id: '0oak3zy3jhU7IZdW70h7',
-  redirect_uri: window.location.origin + '/implicit/callback',
+  issuer: 'https://dev-133320.okta.com/oauth2/default',
+  client_id: '0oa3pw1qnaLnwQeC7357',
+  redirect_uri: window.location.origin + '/callback',
   scopes: ['openid','profile'],
+  pkce: true
 });
 
 const router = new Router({
@@ -27,21 +29,19 @@ const router = new Router({
       path: '/read',
       name: 'read',
       component: Read,
-      meta: {
-        requiresAuth: true,
-      },
+      meta: { requiresAuth: true }
     },
     {
       path: '/edit',
       name: 'edit',
       component: Edit,
-      meta: {
-        requiresAuth: true,
-      },
-      beforeEnter: isInGroup('editor')
+      meta: { requiresAuth: true },
+      beforeEnter: async (to, from, next) => {
+        next(await isInGroup('editor'));
+      }
     },
     {
-      path: '/implicit/callback',
+      path: '/callback',
       component: Auth.handleCallback()
     },
     {
@@ -51,8 +51,8 @@ const router = new Router({
       }
     }
   ]
-})
+});
 
-router.beforeEach(Vue.prototype.$auth.authRedirectGuard())
+router.beforeEach(Vue.prototype.$auth.authRedirectGuard());
 
 export default router;
