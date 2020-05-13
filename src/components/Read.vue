@@ -6,23 +6,23 @@
 </template>
 
 <script>
-  import marked from 'marked';
-  import { getContent } from '../content';
-  import { isInGroup } from '../user'
+import marked from 'marked';
+import { getContent } from '../content';
+import { isInGroup } from '../user'
 
-  export default {
-    name: 'Read',
-    data: () => ({
-      isEditor: false
-    }),
-    computed: {
-      compiledMarkdown: function() {
-        const content = getContent();
-        return marked(content, { sanitize: true });
-      },
+export default {
+  name: 'Read',
+  data: () => ({
+    isEditor: false
+  }),
+  computed: {
+    compiledMarkdown: function() {
+      const content = getContent();
+      return marked(content, { sanitize: true });
     },
-    created() {
-      isInGroup('editor').then(response => this.isEditor = response);
-    }
+  },
+  created() {
+    isInGroup('editor').then(response => this.isEditor = response);
   }
+}
 </script>

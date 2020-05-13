@@ -11,40 +11,40 @@
 </template>
 
 <script>
-  import _ from 'lodash'
-  import marked from 'marked';
-  import { getContent, setContent } from '../content';
+import _ from 'lodash'
+import marked from 'marked';
+import { getContent, setContent } from '../content';
 
-  export default {
-    name: 'Edit',
-    data: () => ({
-      input: getContent()
-    }),
-    computed: {
-      compiledMarkdown: function() {
-        return marked(this.input, { sanitize: true });
-      }
-    },
-    methods: {
-      update: _.debounce(function(e) {
-        this.input = e.target.value;
-      }, 300),
-      saveContent: function() {
-        setContent(this.input);
-        alert('Content updated!');
-      }
+export default {
+  name: 'Edit',
+  data: () => ({
+    input: getContent()
+  }),
+  computed: {
+    compiledMarkdown: function() {
+      return marked(this.input, { sanitize: true });
+    }
+  },
+  methods: {
+    update: _.debounce(function(e) {
+      this.input = e.target.value;
+    }, 300),
+    saveContent: function() {
+      setContent(this.input);
+      alert('Content updated!');
     }
   }
+}
 </script>
 
 <style>
-  .page-input {
-    width: 100%;
-    min-height: 128px;
-  }
+.page-input {
+  width: 100%;
+  min-height: 128px;
+}
 
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-  }
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
 </style>

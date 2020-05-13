@@ -12,8 +12,8 @@
           <md-icon>menu</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item @click="$router.push({ name: 'home' })">Home</md-menu-item>
-          <md-menu-item @click="$router.push({ name: 'read' })">Read</md-menu-item>
+          <md-menu-item @click="$router.safeNavigate($route, 'home')">Home</md-menu-item>
+          <md-menu-item @click="$router.safeNavigate($route, 'read')">Read</md-menu-item>
         </md-menu-content>
       </md-menu>
     </md-toolbar>
@@ -23,59 +23,58 @@
   </div>
 </template>
 
-
 <script>
-  export default {
-    name: 'App',
-    data: () => ({
-      title: "Vue Groups",
-      authenticated: false
-    }),
-    watch: {
-      '$route': 'isAuthenticated'
+export default {
+  name: 'App',
+  data: () => ({
+    title: "Vue Groups",
+    authenticated: false
+  }),
+  watch: {
+    '$route': 'isAuthenticated'
+  },
+  methods: {
+    async isAuthenticated () {
+      this.authenticated = await this.$auth.isAuthenticated()
     },
-    methods: {
-      async isAuthenticated () {
-        this.authenticated = await this.$auth.isAuthenticated()
-      },
-      login () {
-        this.$auth.loginRedirect('/')
-      },
-      async logout () {
-        await this.$auth.logout();
-        await this.isAuthenticated();
-        this.$router.push({ path: '/' })
-      }
+    login () {
+      this.$auth.loginRedirect('/')
     },
-    created() {
-      this.isAuthenticated();
+    async logout () {
+      await this.$auth.logout();
+      await this.isAuthenticated();
+      if (this.$route.path !== '/') this.$router.push({ path: '/' })
     }
+  },
+  created() {
+    this.isAuthenticated();
   }
+}
 </script>
 
 <style>
-  #app {
-    font-family: 'Ubuntu', sans-serif;
-  }
+#app {
+  font-family: 'Ubuntu', sans-serif;
+}
 
-  .branding {
-    flex: 1;
-    text-align: left;
-  }
+.branding {
+  flex: 1;
+  text-align: left;
+}
 
-  h1, h2 {
-    text-align: center;
-  }
+h1, h2 {
+  text-align: center;
+}
 
-  .router {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
+.router {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 
-  .content {
-    padding-top: 16px;
-    padding-bottom: 16px;
-    width: 1024px;
-  }
+.content {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  width: 1024px;
+}
 </style>
