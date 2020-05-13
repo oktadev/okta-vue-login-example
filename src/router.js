@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Home from './components/Home.vue'
 import Edit from './components/Edit.vue'
 import Read from './components/Read.vue'
-
 import Auth from '@okta/okta-vue'
 import { isInGroup } from './user'
 
@@ -52,6 +51,10 @@ const router = new Router({
     }
   ]
 });
+
+router.safeNavigate = function(route, dest) {
+  if (route.name != dest) this.push({ name: dest });
+}
 
 router.beforeEach(Vue.prototype.$auth.authRedirectGuard());
 
