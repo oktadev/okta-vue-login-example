@@ -26,7 +26,7 @@ npm install
 This will get a copy of the project installed locally. Start the app using:
 
 ```bash
-npm run dev
+npm run serve
 ```
 
 You won't be able to log in until you register this app with Okta.
@@ -48,6 +48,8 @@ Vue.use(Auth, {
   pkce: true
 });
 ```
+
+Now you should be able to login at `http://localhost:8080`! 
 
 ## Links
 
