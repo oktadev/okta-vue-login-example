@@ -35,7 +35,7 @@ You won't be able to log in until you register this app with Okta.
 
 You will need to create an OpenID Connect Application in Okta to get your values to perform authentication.
 
-Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don’t have an account) and navigate to **Applications** > **Add Application**. Click **Single-Page App**, click **Next**, give the app a name you’ll remember, set the Login redirect URI to `http://localhost:8080/callback`, and click **Done**.
+Log in to your Okta Developer account (or [sign up](https://developer.okta.com/signup/) if you don’t have an account) and navigate to **Applications** > **Add Application**. Select **Single-Page App**, give the app a name you’ll remember, set the Login redirect URI to `http://localhost:8080/callback`, and **Save**.
 
 Set the `issuer` and copy the `clientId` into `src/router.js`.
 
